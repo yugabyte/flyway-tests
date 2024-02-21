@@ -1,12 +1,14 @@
 package com.yugabyte;
 
 import org.flywaydb.core.Flyway;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.sql.*;
 
 import static com.yugabyte.Utils.startYBDBCluster;
+import static com.yugabyte.Utils.stopYBDBCluster;
 
 public class TestBaseline {
 
@@ -17,7 +19,7 @@ public class TestBaseline {
     public void setup() throws ClassNotFoundException, SQLException {
         startYBDBCluster();
         Class.forName("com.yugabyte.Driver");
-        conn = DriverManager.getConnection(url);
+        conn = DriverManager.getConnection(url, "yugabyte", "yugabyte");
     }
 
     @Test
@@ -32,6 +34,11 @@ public class TestBaseline {
         if(!rs.next()){
             throw new RuntimeException("Baseline Command returned null row from flyway_schema_history table");
         }
+    }
+
+    @After
+    public void cleanup() {
+        stopYBDBCluster();
     }
 
 }

@@ -10,6 +10,10 @@ public class Utils {
         executeCmd(path + "/bin/yugabyted start", "Start YugabyteDB rf=3 cluster", 15);
     }
 
+    protected static void stopYBDBCluster() {
+        executeCmd(path + "/bin/yugabyted destroy", "Stop YugabyteDB cluster", 10);
+    }
+
     protected static void executeCmd(String cmd, String msg, int timeout) {
         try {
             ProcessBuilder builder = new ProcessBuilder();
