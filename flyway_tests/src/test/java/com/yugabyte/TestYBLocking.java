@@ -14,7 +14,7 @@ import java.util.Map;
 import static com.yugabyte.Utils.startYBDBCluster;
 import static com.yugabyte.Utils.stopYBDBCluster;
 
-public class TestAdvisoryLock {
+public class TestYBLocking {
     static String url = "jdbc:yugabytedb://127.0.0.1:5433/yugabyte";
     Connection conn = null;
 

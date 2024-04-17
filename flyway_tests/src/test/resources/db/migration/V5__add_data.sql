@@ -1,1 +1,1 @@
-INSERT INTO EMPLOYEE VALUES (1, 'Praggyananda', 'Chennai, TN');
+INSERT INTO EMPLOYEE VALUES (1, 'Praggnanandhaa', 'Chennai, TN');
