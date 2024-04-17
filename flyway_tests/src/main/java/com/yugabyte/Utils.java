@@ -6,8 +6,11 @@ public class Utils {
     static String path = System.getenv("YBDB_PATH");
 
     protected static void startYBDBCluster() {
+        if (path == null || path.trim().isEmpty()) {
+            throw new IllegalArgumentException("No valid path available for YBDB_PATH: " + path);
+        }
         executeCmd(path + "/bin/yugabyted destroy", "Stop YugabyteDB cluster", 10);
-        executeCmd(path + "/bin/yugabyted start", "Start YugabyteDB rf=3 cluster", 15);
+        executeCmd(path + "/bin/yugabyted start", "Start YugabyteDB cluster", 120);
     }
 
     protected static void stopYBDBCluster() {
@@ -24,6 +27,9 @@ public class Utils {
             if (exitCode != 0) {
                 throw new RuntimeException(msg + ": FAILED");
             }
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException ie) {}
             System.out.println(msg + ": SUCCEEDED!");
         } catch (Exception e) {
             System.out.println("Exception " + e);

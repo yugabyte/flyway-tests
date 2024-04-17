@@ -2,6 +2,7 @@ package com.yugabyte;
 
 import org.flywaydb.core.Flyway;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -31,9 +32,7 @@ public class TestBaseline {
 
         ResultSet rs = stmt.executeQuery("select * from flyway_schema_history");
 
-        if(!rs.next()){
-            throw new RuntimeException("Baseline Command returned null row from flyway_schema_history table");
-        }
+        Assert.assertTrue("Baseline Command returned no row from flyway_schema_history table", rs.next());
     }
 
     @After
