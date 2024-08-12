@@ -28,11 +28,21 @@ public class TestBaseline {
         Flyway flyway = Flyway.configure().dataSource(url, "yugabyte", "yugabyte").load();
         flyway.baseline();
 
-        Statement stmt = conn.createStatement();
+        TestYBLocking.checkMigrations(conn, 1);
+    }
 
-        ResultSet rs = stmt.executeQuery("select * from flyway_schema_history");
+    @Test
+    public void dlabsTest() throws SQLException {
+        Flyway flyway = Flyway.configure()
+          .locations("filesystem:src/test/resources/dlabs-schema")
+          .dataSource(url, "yugabyte", "yugabyte")
+          .baselineVersion("0")
+          .baselineOnMigrate(true)
+          .loggers("slf4j")
+          .load();
+        flyway.migrate();
 
-        Assert.assertTrue("Baseline Command returned no row from flyway_schema_history table", rs.next());
+        TestYBLocking.checkMigrations(conn, 6); // 5 + 1 for baselien @ 0 index
     }
 
     @After

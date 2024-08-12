@@ -10,7 +10,7 @@ public class Utils {
             throw new IllegalArgumentException("No valid path available for YBDB_PATH: " + path);
         }
         executeCmd(path + "/bin/yb-ctl destroy", "Stop YugabyteDB cluster", 10);
-        executeCmd(path + "/bin/yb-ctl start", "Start YugabyteDB cluster", 120);
+        executeCmd(path + "/bin/yb-ctl start --tserver_flags \"ysql_log_statement=all\"", "Start YugabyteDB cluster", 120);
     }
 
     protected static void stopYBDBCluster() {
