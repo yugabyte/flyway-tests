@@ -57,14 +57,26 @@ public class TestYBLocking {
 
         try {
             conn = DriverManager.getConnection(url, "yugabyte", "yugabyte");
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("select count(*) from flyway_schema_history");
-            Assert.assertTrue("Baseline Command returned no row from flyway_schema_history table", rs.next());
-            int count = rs.getInt(1);
-            Assert.assertEquals("Expected 5 migrations but found " + count, count, 5);
+            checkMigrations(conn, 5);
         } catch (SQLException e) {
             Assert.fail("Failed with " + e);
         }
+    }
+
+    public static void checkMigrations(Connection conn, int expected) throws SQLException {
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery("select * from flyway_schema_history");
+        Assert.assertTrue("No migrations recorded in flyway_schema_history table", rs.next());
+        int rows = 0;
+        do {
+            if (!"t".equalsIgnoreCase(rs.getString("success"))) {
+                String version = rs.getString("version");
+                String script = rs.getString("script");
+                Assert.fail("Migration " + version + " (" + script + ") failed!");
+            }
+            rows++;
+        } while (rs.next());
+        Assert.assertEquals("Expected " + expected + " migrations but found " + rows, expected, rows);
     }
 
     private void migrationOperation() {
@@ -79,7 +91,7 @@ public class TestYBLocking {
             if (ex.getCause() instanceof SQLException
                     && "40001".equals(((SQLException) ex.getCause()).getSQLState())) {
                 // possible, so ignore.
-                System.out.println("FlywayException in thread (40001): " + ex);
+                System.out.println("FlywayException during migration: SQLState 40001. This is possible in concurrent migration.");
             } else {
                 System.out.println("FlywayException in thread: " + ex);
                 errors.put(Thread.currentThread().getName(), ex);

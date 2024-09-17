@@ -9,12 +9,12 @@ public class Utils {
         if (path == null || path.trim().isEmpty()) {
             throw new IllegalArgumentException("No valid path available for YBDB_PATH: " + path);
         }
-        executeCmd(path + "/bin/yugabyted destroy", "Stop YugabyteDB cluster", 10);
-        executeCmd(path + "/bin/yugabyted start", "Start YugabyteDB cluster", 120);
+        executeCmd(path + "/bin/yb-ctl destroy", "Stop YugabyteDB cluster", 10);
+        executeCmd(path + "/bin/yb-ctl start --tserver_flags \"ysql_log_statement=all\"", "Start YugabyteDB cluster", 120);
     }
 
     protected static void stopYBDBCluster() {
-        executeCmd(path + "/bin/yugabyted destroy", "Stop YugabyteDB cluster", 10);
+        executeCmd(path + "/bin/yb-ctl destroy", "Stop YugabyteDB cluster", 10);
     }
 
     protected static void executeCmd(String cmd, String msg, int timeout) {
