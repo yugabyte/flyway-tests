@@ -91,9 +91,9 @@ public class TestYBLocking {
             if (ex.getCause() instanceof SQLException
                     && "40001".equals(((SQLException) ex.getCause()).getSQLState())) {
                 // possible, so ignore.
-                System.out.println("FlywayException during migration: SQLState 40001. This is possible in concurrent migration.");
+                System.out.println("[" + Thread.currentThread().getName() + "] FlywayException during migration: SQLState 40001. This is possible in concurrent migration.");
             } else {
-                System.out.println("FlywayException in thread: " + ex);
+                System.out.println("[" + Thread.currentThread().getName() + "] FlywayException in thread: " + ex);
                 errors.put(Thread.currentThread().getName(), ex);
             }
         }

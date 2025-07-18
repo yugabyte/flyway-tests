@@ -31,8 +31,17 @@ public class TestBaseline {
         TestYBLocking.checkMigrations(conn, 1);
     }
 
+    public static void createOldLockTable(Connection conn) throws SQLException {
+        Statement stmt = conn.createStatement();
+        stmt.execute("DROP TABLE IF EXISTS YB_FLYWAY_LOCK_TABLE");
+        System.out.println("Deleted YB_FLYWAY_LOCK_TABLE table");
+        stmt.execute("CREATE TABLE YB_FLYWAY_LOCK_TABLE (table_name varchar PRIMARY KEY, locked bool)");
+        System.out.println("Created YB_FLYWAY_LOCK_TABLE table with old schema");
+    }
+
     @Test
     public void dlabsTest() throws SQLException {
+        createOldLockTable(conn);
         Flyway flyway = Flyway.configure()
           .locations("filesystem:src/test/resources/dlabs-schema")
           .dataSource(url, "yugabyte", "yugabyte")

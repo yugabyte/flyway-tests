@@ -5,6 +5,7 @@
     </encoder>
   </appender>
 
+  <logger name="org.flywaydb.community.database.postgresql.yugabytedb" level="TRACE"/>
   <root level="info">
     <appender-ref ref="STDOUT" />
   </root>
