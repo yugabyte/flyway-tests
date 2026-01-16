@@ -42,7 +42,7 @@ public class TestBaseline {
           .load();
         flyway.migrate();
 
-        TestYBLocking.checkMigrations(conn, 6); // 5 + 1 for baselien @ 0 index
+        TestYBLocking.checkMigrations(conn, 7); // 5 + 1 for baselien @ 0 index
     }
 
     @After
