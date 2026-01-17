@@ -6,6 +6,7 @@ public class Utils {
     static String path = System.getenv("YBDB_PATH");
 
     protected static void startYBDBCluster() {
+        System.out.println("Starting YugabyteDB cluster...");
         if (path == null || path.trim().isEmpty()) {
             throw new IllegalArgumentException("No valid path available for YBDB_PATH: " + path);
         }
@@ -14,6 +15,7 @@ public class Utils {
     }
 
     protected static void stopYBDBCluster() {
+        System.out.println("Stopping YugabyteDB cluster...");
         executeCmd(path + "/bin/yb-ctl destroy", "Stop YugabyteDB cluster", 10);
     }
 
